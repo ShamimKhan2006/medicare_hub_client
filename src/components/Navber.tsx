@@ -26,9 +26,9 @@ interface NavLink {
 
 const PRIVATE_LINKS: NavLink[] = [
   { label: "Home", href: "/", icon: Home },
-  { label: "Add Health Post", href: "/health-posts/new", icon: PlusCircle },
+  { label: "Add Health Post", href: "/allpages/addhealthpost", icon: PlusCircle },
   { label: "Health Posts", href: "/allpages/allData", icon: Newspaper },
-  { label: "My Health Posts", href: "", icon: FileText },
+  { label: "My Health Posts", href: "/allpages/myhealthpost", icon: FileText },
   { label: "About", href: "/about", icon: Info },
   { label: "Contact", href: "/contact", icon: Mail },
   { label: "My Interactions", href: "/my-interactions", icon: Activity },
