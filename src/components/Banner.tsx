@@ -61,7 +61,7 @@ export default function MedicardHubHero() {
         fontFamily: "'Sora', 'Inter', sans-serif",
         background: "#F4F1EA",
         color: "#1A1816",
-        borderRadius: "20px",
+    
         overflow: "hidden",
         position: "relative",
         border: "1px solid #E4E0D6",
@@ -133,7 +133,7 @@ export default function MedicardHubHero() {
                 style={{
                   width: i === index ? "26px" : "8px",
                   height: "8px",
-                  borderRadius: "999px",
+                
                   background: i === index ? "#F40C1F" : "#D8D3C6",
                   display: "inline-block",
                 }}
@@ -189,7 +189,7 @@ export default function MedicardHubHero() {
           transform: "translateY(-50%)",
           width: "44px",
           height: "44px",
-          borderRadius: "10px",
+        
           border: "1px solid #E4E0D6",
           background: "#F4F1EA",
           display: "flex",
@@ -212,7 +212,7 @@ export default function MedicardHubHero() {
           transform: "translateY(-50%)",
           width: "44px",
           height: "44px",
-          borderRadius: "10px",
+     
           border: "1px solid #E4E0D6",
           background: "#F4F1EA",
           display: "flex",
@@ -234,7 +234,7 @@ export default function MedicardHubHero() {
           bottom: "24px",
           background: "#1A1816",
           color: "#FFFFFF",
-          borderRadius: "999px",
+       
           padding: "12px 20px",
           display: "flex",
           alignItems: "center",

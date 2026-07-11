@@ -75,7 +75,7 @@ export default function MedicardHubFooter() {
         fontFamily: "'Sora', 'Inter', sans-serif",
         background: "#F40C1F",
         color: "#FAFAF7",
-        borderRadius: "20px",
+      
         border: "1px solid rgba(255,255,255,0.14)",
         padding: "56px 48px 32px",
         width: "100%",
@@ -198,7 +198,7 @@ export default function MedicardHubFooter() {
         <div
           style={{
             border: "1px solid rgba(255,255,255,0.22)",
-            borderRadius: "16px",
+            
             padding: "32px 36px",
           }}
         >

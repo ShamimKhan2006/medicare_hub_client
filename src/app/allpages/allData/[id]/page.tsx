@@ -1,17 +1,16 @@
 import React from 'react';
+import Image from "next/image";
 import { 
-  ShieldCheck, 
+  Stethoscope,
   User, 
   CreditCard, 
   Calendar, 
-  Phone, 
-  Mail, 
   MapPin, 
   Building2,
   Activity,
   CheckCircle2,
   XCircle,
-  Clock
+  Star
 } from 'lucide-react';
 
 type Params = Promise<{ id: string }>;
@@ -29,10 +28,10 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
 
   if (!res.ok) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <XCircle className="w-14 h-14 text-red-500 mx-auto mb-4" />
-          <p className="text-slate-300 text-lg">Failed to load Medicare details.</p>
+          <p className="text-black text-lg">Failed to load Medicare details.</p>
         </div>
       </div>
     );
@@ -40,60 +39,143 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
 
   const data = await res.json();
 
-  const statusIsActive = data?.status?.toLowerCase() === 'active';
+  const statusIsActive = data?.available;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-10 px-4">
+    <div className="min-h-screen bg-white py-10 px-4">
       <div className="max-w-4xl mx-auto">
 
         {/* Header Card */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 p-8 mb-6 shadow-2xl shadow-blue-900/30">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center border border-white/20">
-                <ShieldCheck className="w-8 h-8 text-white" />
+        <div className="bg-gray-50 rounded-3xl overflow-hidden mb-8 text-center pb-8">
+          {/* Photo */}
+          <div className="relative w-full h-72">
+            {data?.image ? (
+              <Image
+                src={data.image}
+                alt={data?.name ?? "Doctor"}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <User className="w-16 h-16 text-gray-300" />
               </div>
-              <div>
-                <p className="text-blue-100 text-sm font-medium tracking-wide uppercase">Medicare Record</p>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">
-                  {data?.name ?? 'N/A'}
-                </h1>
-              </div>
+            )}
+            {/* Fee badge */}
+            <span className="absolute top-4 right-4 bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-sm">
+              {data?.fee ?? 'N/A'}
+            </span>
+          </div>
+
+          {/* Overlapping icon badge */}
+          <div className="relative -mt-9 mb-4 flex justify-center">
+            <div className="w-[72px] h-[72px] rounded-full bg-red-600 flex items-center justify-center border-4 border-white shadow-md">
+              <Stethoscope className="w-8 h-8 text-white" strokeWidth={1.5} />
             </div>
-            <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur border ${
-                statusIsActive
-                  ? 'bg-emerald-400/20 border-emerald-300/30 text-emerald-100'
-                  : 'bg-red-400/20 border-red-300/30 text-red-100'
+          </div>
+
+          {/* Specialization */}
+          <p className="text-gray-800 text-xs font-bold tracking-widest uppercase mb-2">
+            {data?.specialization ?? 'N/A'}
+          </p>
+          <div className="w-8 h-[2px] bg-red-600 mx-auto mb-3" />
+
+          {/* Name */}
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {data?.name ?? 'N/A'}
+          </h1>
+
+          {/* Rating + availability */}
+          <div className="flex items-center justify-center gap-5">
+            <span className="flex items-center gap-1 text-gray-800 text-sm font-semibold">
+              <Star className="w-4 h-4 text-yellow-500" fill="currentColor" />
+              {data?.rating ?? 'N/A'}
+            </span>
+            <span
+              className={`flex items-center gap-1 text-xs font-bold uppercase ${
+                statusIsActive ? 'text-emerald-600' : 'text-red-500'
               }`}
             >
-              {statusIsActive ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-              {data?.status ?? 'Unknown'}
-            </div>
+              {statusIsActive ? (
+                <CheckCircle2 className="w-4 h-4" />
+              ) : (
+                <XCircle className="w-4 h-4" />
+              )}
+              {statusIsActive ? 'Available' : 'Not Available'}
+            </span>
           </div>
         </div>
 
         {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-          <InfoCard icon={<CreditCard className="w-5 h-5 text-cyan-400" />} label="Member ID" value={data?.memberId ?? id} />
-          <InfoCard icon={<Activity className="w-5 h-5 text-cyan-400" />} label="Plan Type" value={data?.planType} />
-          <InfoCard icon={<Calendar className="w-5 h-5 text-cyan-400" />} label="Effective Date" value={data?.effectiveDate} />
-          <InfoCard icon={<Clock className="w-5 h-5 text-cyan-400" />} label="Expiry Date" value={data?.expiryDate} />
-          <InfoCard icon={<Building2 className="w-5 h-5 text-cyan-400" />} label="Provider" value={data?.provider} />
-          <InfoCard icon={<User className="w-5 h-5 text-cyan-400" />} label="Coverage Type" value={data?.coverageType} />
-          <InfoCard icon={<Phone className="w-5 h-5 text-cyan-400" />} label="Phone" value={data?.phone} />
-          <InfoCard icon={<Mail className="w-5 h-5 text-cyan-400" />} label="Email" value={data?.email} />
+          <InfoCard
+            icon={<User className="w-5 h-5 text-red-600" />}
+            label="Doctor Name"
+            value={data?.name}
+          />
+
+          <InfoCard
+            icon={<Activity className="w-5 h-5 text-red-600" />}
+            label="Specialization"
+            value={data?.specialization}
+          />
+
+          <InfoCard
+            icon={<Building2 className="w-5 h-5 text-red-600" />}
+            label="Hospital"
+            value={data?.hospital}
+          />
+
+          <InfoCard
+            icon={<MapPin className="w-5 h-5 text-red-600" />}
+            label="Location"
+            value={data?.location}
+          />
+
+          <InfoCard
+            icon={<CreditCard className="w-5 h-5 text-red-600" />}
+            label="Consultation Fee"
+            value={data?.fee}
+          />
+
+          <InfoCard
+            icon={<Calendar className="w-5 h-5 text-red-600" />}
+            label="Experience"
+            value={`${data?.experience} Years`}
+          />
+
+          <InfoCard
+            icon={<Star className="w-5 h-5 text-red-600" />}
+            label="Rating"
+            value={`${data?.rating} ⭐`}
+          />
+
+          <InfoCard
+            icon={<CheckCircle2 className="w-5 h-5 text-red-600" />}
+            label="Availability"
+            value={data?.available ? "Available" : "Not Available"}
+          />
 
           <div className="md:col-span-2">
-            <InfoCard icon={<MapPin className="w-5 h-5 text-cyan-400" />} label="Address" value={data?.address} />
+            <InfoCard 
+              icon={<MapPin className="w-5 h-5 text-red-600" />} 
+              label="Address" 
+              value={data?.address}
+            />
           </div>
 
         </div>
 
+        {/* Book button */}
+        <div className="flex justify-center mt-10">
+          <button className="bg-red-600 hover:bg-red-700 transition-colors text-white font-bold text-xs tracking-wide uppercase px-10 py-4 rounded-full shadow-sm">
+            Book Appointment
+          </button>
+        </div>
+
         {/* Footer note */}
-        <p className="text-center text-slate-500 text-xs mt-8">
+        <p className="text-center text-gray-400 text-xs mt-8">
           Record ID: {id} · Fetched securely
         </p>
       </div>
@@ -110,12 +192,12 @@ const InfoCard = ({
   label: string;
   value: string | undefined | null;
 }) => (
-  <div className="group rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-700/50 transition-colors p-5 backdrop-blur">
+  <div className="group rounded-2xl bg-gray-50 border border-transparent hover:border-red-200 transition-colors p-5">
     <div className="flex items-center gap-2 mb-2">
       {icon}
-      <span className="text-xs uppercase tracking-wide text-slate-400 font-medium">{label}</span>
+      <span className="text-xs uppercase tracking-wide text-gray-500 font-medium">{label}</span>
     </div>
-    <p className="text-slate-100 text-base font-semibold">{value ?? 'N/A'}</p>
+    <p className="text-black text-base font-semibold">{value ?? 'N/A'}</p>
   </div>
 );
 
