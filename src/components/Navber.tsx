@@ -6,14 +6,17 @@ import {
   X,
   ChevronDown,
   Lock,
-//   Home,
-//   Newspaper,
+
+   Newspaper,
   PlusCircle,
   FileText,
   Activity,
   Settings,
   LogOut,
   User,
+  Home,
+  Info,
+  Mail,
 //   Info,
 //   Mail,
 } from "lucide-react";
@@ -25,16 +28,15 @@ interface NavLink {
   icon: React.ElementType;
 }
 
-// const PUBLIC_LINKS: NavLink[] = [
-//   { label: "Home", href: "/", icon: Home },
-//   { label: "Health Posts", href: "/health-posts", icon: Newspaper },
-//   { label: "About", href: "/about", icon: Info },
-//   { label: "Contact", href: "/contact", icon: Mail },
-// ];
+
 
 const PRIVATE_LINKS: NavLink[] = [
+  { label: "Home", href: "/", icon: Home },
   { label: "Add Health Post", href: "/health-posts/new", icon: PlusCircle },
-  { label: "My Health Posts", href: "/my-health-posts", icon: FileText },
+  { label: "Health Posts", href: "/allpages/allData", icon: Newspaper },
+  { label: "My Health Posts", href: "", icon: FileText },
+   { label: "About", href: "/about", icon: Info },
+   { label: "Contact", href: "/contact", icon: Mail },
   { label: "My Interactions", href: "/my-interactions", icon: Activity },
 ];
 
@@ -54,7 +56,7 @@ export default function MedicardHubNavbar() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
-  const navItems = isLoggedIn ? [ ...PRIVATE_LINKS] :[];
+  const navItems = isLoggedIn ? [] :[...PRIVATE_LINKS];
 
   return (
     <div style={{ fontFamily: "'Sora', 'Inter', sans-serif", width: "100%", position: "relative" }}>

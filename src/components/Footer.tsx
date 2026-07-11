@@ -276,7 +276,7 @@ export default function MedicardHubFooter() {
         <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.72)" }}>
           Developed by{" "}
           <a href="#" className="mcf-credit" style={{ color: "rgba(255,255,255,0.88)", textDecoration: "underline", textUnderlineOffset: "3px" }}>
-            Unifato
+            Shamim Khan
           </a>
         </div>
       </div>
