@@ -1,23 +1,26 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import {
   Menu,
   X,
   ChevronDown,
-  Lock,
   Newspaper,
   PlusCircle,
   FileText,
   Activity,
   Settings,
   LogOut,
+  LogIn,
+  UserPlus,
   User,
   Home,
   Info,
   Mail,
 } from "lucide-react";
-;
+import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 
 interface NavLink {
   label: string;
@@ -25,7 +28,8 @@ interface NavLink {
   icon: React.ElementType;
 }
 
-const PRIVATE_LINKS: NavLink[] = [
+// Always visible, regardless of auth state
+const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/", icon: Home },
   { label: "Add Health Post", href: "/allpages/addhealthpost", icon: PlusCircle },
   { label: "Health Posts", href: "/allpages/allData", icon: Newspaper },
@@ -35,15 +39,7 @@ const PRIVATE_LINKS: NavLink[] = [
   { label: "My Interactions", href: "/my-interactions", icon: Activity },
 ];
 
-    //  const {data:session}=await auth.api.getSession({
-    //   headers: await headers()
-    //  }) 
-
-    //  const user=session?.user
-    //  console.log("user",user)
-
 export default function MedicardHubNavbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -79,7 +75,31 @@ export default function MedicardHubNavbar() {
     };
   }, [open]);
 
-  const navItems = isLoggedIn ? [] : [...PRIVATE_LINKS];
+  const { data: session, isPending } = authClient.useSession();
+
+  const isLoggedIn = !!session?.user;
+  const user = session?.user;
+
+  // session.user.image can be arbitrary/seed data that isn't a real URL.
+  // next/image throws if src isn't a relative path (leading "/") or an
+  // absolute http(s) URL, so guard against anything else here.
+  const isValidImageSrc = (src?: string | null): src is string => {
+    if (!src) return false;
+    if (src.startsWith("/")) return true;
+    try {
+      const url = new URL(src);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
+  const avatarSrc = isValidImageSrc(user?.image) ? user!.image : null;
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    setProfileOpen(false);
+    setOpen(false);
+  };
 
   return (
     <div
@@ -193,6 +213,16 @@ export default function MedicardHubNavbar() {
         }
         .mcn-cta:active { transform: translateY(0); }
 
+        .mcn-cta-outline {
+          transition: transform .15s ease, box-shadow .25s ease, background .2s ease, border-color .2s ease;
+        }
+        .mcn-cta-outline:hover {
+          background: #F4F1EA;
+          border-color: rgba(244,12,31,0.4);
+          transform: translateY(-2px);
+        }
+        .mcn-cta-outline:active { transform: translateY(0); }
+
         .mcn-profile-btn {
           transition: border-color .25s ease, box-shadow .25s ease, transform .15s ease;
         }
@@ -203,6 +233,15 @@ export default function MedicardHubNavbar() {
 
         .mcn-avatar {
           position: relative;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: #1A1816;
+          color: #FFF;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
         }
         .mcn-avatar::after {
           content: "";
@@ -286,6 +325,12 @@ export default function MedicardHubNavbar() {
           transform: translateX(4px);
         }
 
+        .mcn-mobile-actions {
+          display: flex;
+          gap: 10px;
+        }
+        .mcn-mobile-actions > * { flex: 1; }
+
         @media (max-width: 900px) {
           .mcn-desktop-links, .mcn-desktop-actions { display: none !important; }
           .mcn-toggle { display: flex !important; }
@@ -330,8 +375,9 @@ export default function MedicardHubNavbar() {
             </span>
           </Link>
 
+          {/* Routes: always visible, logged in or not */}
           <div className="mcn-desktop-links" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
-            {navItems.map((link, idx) => {
+            {NAV_LINKS.map((link, idx) => {
               const Icon = link.icon;
               return (
                 <Link
@@ -341,32 +387,14 @@ export default function MedicardHubNavbar() {
                   style={{ fontSize: "13.5px", fontWeight: 500, color: "#5C5850", animationDelay: `${idx * 0.05}s` }}
                 >
                   <Icon size={15} /> {link.label}
-                  {PRIVATE_LINKS.includes(link) && <Lock size={11} color="#B7B2A6" />}
                 </Link>
               );
             })}
           </div>
 
-          <div className="mcn-desktop-actions" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-            {!isLoggedIn ? (
-              <button
-                className="mcn-cta"
-                onClick={() => setIsLoggedIn(true)}
-                style={{
-                  background: "linear-gradient(135deg, #F40C1F, #C40817)",
-                  color: "#FFFFFF",
-                  border: "none",
-                  borderRadius: "999px",
-                  padding: "10px 20px",
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                Logout
-              </button>
-            ) : (
-              <div ref={profileRef} style={{ position: "relative" }}>
+          <div className="mcn-desktop-actions" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {isPending ? null : isLoggedIn ? (
+              <div ref={profileRef} style={{ position: "relative", display: "flex", alignItems: "center", gap: "10px" }}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
                   className="mcn-profile-btn"
@@ -381,35 +409,33 @@ export default function MedicardHubNavbar() {
                     cursor: "pointer",
                   }}
                 >
-                  <div
-                    className="mcn-avatar"
-                    style={{
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "50%",
-                      background: "#1A1816",
-                      color: "#FFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <User size={14} />
+                  <div className="mcn-avatar">
+                    {avatarSrc ? (
+                      <Image
+                        src={avatarSrc}
+                        alt={user?.name || "User"}
+                        width={28}
+                        height={28}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <User size={14} />
+                    )}
                   </div>
-                  <span style={{ fontSize: "13px", fontWeight: 600 }}>Sumaiya</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600 }}>Profile</span>
                   <ChevronDown
                     size={14}
                     style={{ transform: profileOpen ? "rotate(180deg)" : "none", transition: "transform .25s ease" }}
                   />
                 </button>
 
-                {/* {profileOpen && (
+                {profileOpen && (
                   <div
                     className="mcn-dropdown"
                     style={{
                       position: "absolute",
                       top: "calc(100% + 10px)",
-                      right: 0,
+                      right: "110px",
                       background: "#FFFFFF",
                       border: "1px solid rgba(26,24,22,0.08)",
                       borderRadius: "14px",
@@ -418,25 +444,75 @@ export default function MedicardHubNavbar() {
                       minWidth: "180px",
                     }}
                   >
-                    <Link href="/profile" className="mcn-dd-item">
+                    <Link href="/profile" className="mcn-dd-item" onClick={() => setProfileOpen(false)}>
                       <User size={15} /> Profile
                     </Link>
-                    <Link href="/settings" className="mcn-dd-item">
+                    <Link href="/settings" className="mcn-dd-item" onClick={() => setProfileOpen(false)}>
                       <Settings size={15} /> Settings
                     </Link>
-                    <button
-                      onClick={() => {
-                        setIsLoggedIn(false);
-                        setProfileOpen(false);
-                      }}
-                      className="mcn-dd-item danger"
-                      style={{ width: "100%", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}
-                    >
-                      <LogOut size={15} /> Log out
-                    </button>
                   </div>
-                )} */}
+                )}
+
+                <button
+                  className="mcn-cta"
+                  onClick={handleLogout}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "linear-gradient(135deg, #F40C1F, #C40817)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "10px 18px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  <LogOut size={15} /> Logout
+                </button>
               </div>
+            ) : (
+              <>
+                <Link
+                  href="/allpages/register"
+                  className="mcn-cta-outline"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    color: "#1A1816",
+                    border: "1px solid rgba(26,24,22,0.14)",
+                    borderRadius: "999px",
+                    padding: "10px 18px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  <UserPlus size={15} /> Register
+                </Link>
+                <Link
+                  href="/allpages/login"
+                  className="mcn-cta"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "linear-gradient(135deg, #F40C1F, #C40817)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "10px 18px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  <LogIn size={15} /> Login
+                </Link>
+              </>
             )}
           </div>
 
@@ -483,7 +559,8 @@ export default function MedicardHubNavbar() {
               padding: "14px",
             }}
           >
-            {navItems.map((link, idx) => {
+            {/* Routes: always visible, logged in or not */}
+            {NAV_LINKS.map((link, idx) => {
               const Icon = link.icon;
               return (
                 <Link
@@ -494,46 +571,100 @@ export default function MedicardHubNavbar() {
                   style={{ animationDelay: `${idx * 0.05}s` }}
                 >
                   <Icon size={17} /> {link.label}
-                  {PRIVATE_LINKS.includes(link) && <Lock size={12} color="#B7B2A6" style={{ marginLeft: "auto" }} />}
                 </Link>
               );
             })}
 
             <div style={{ height: "1px", background: "rgba(26,24,22,0.08)", margin: "10px 0" }} />
 
-            {/* {!isLoggedIn ? (
-              <button
-                className="mcn-cta"
-                onClick={() => {
-                  setIsLoggedIn(true);
-                  setOpen(false);
-                }}
-                style={{
-                  width: "100%",
-                  background: "linear-gradient(135deg, #F40C1F, #C40817)",
-                  color: "#FFFFFF",
-                  border: "none",
-                  borderRadius: "999px",
-                  padding: "12px 20px",
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                Logout
-              </button>
+            {isPending ? null : isLoggedIn ? (
+              <div className="mcn-mobile-actions">
+                <Link
+                  href="/profile"
+                  onClick={() => setOpen(false)}
+                  className="mcn-cta-outline"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    color: "#1A1816",
+                    border: "1px solid rgba(26,24,22,0.14)",
+                    borderRadius: "999px",
+                    padding: "12px 18px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  <User size={16} /> Profile
+                </Link>
+                <button
+                  className="mcn-cta"
+                  onClick={handleLogout}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    background: "linear-gradient(135deg, #F40C1F, #C40817)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "12px 18px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  <LogOut size={16} /> Logout
+                </button>
+              </div>
             ) : (
-              <button
-                onClick={() => {
-                  setIsLoggedIn(false);
-                  setOpen(false);
-                }}
-                className="mcn-mobile-link danger"
-                style={{ width: "100%", background: "transparent", border: "none", cursor: "pointer", textAlign: "left", color: "#C40817" }}
-              >
-                <LogOut size={17} /> Log out
-              </button>
-            )} */}
+              <div className="mcn-mobile-actions">
+                <Link
+                  href="/allpages/register"
+                  onClick={() => setOpen(false)}
+                  className="mcn-cta-outline"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    color: "#1A1816",
+                    border: "1px solid rgba(26,24,22,0.14)",
+                    borderRadius: "999px",
+                    padding: "12px 18px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  <UserPlus size={16} /> Register
+                </Link>
+                <Link
+                  href="/allpages/login"
+                  onClick={() => setOpen(false)}
+                  className="mcn-cta"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    background: "linear-gradient(135deg, #F40C1F, #C40817)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "12px 18px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  <LogIn size={16} /> Login
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

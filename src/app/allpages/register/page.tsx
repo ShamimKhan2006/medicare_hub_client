@@ -68,7 +68,7 @@ const RegisterPage = () => {
         });
 
         toast.success("Registered successfully");
-        router.push("/login");
+        router.push("/allpages/login");
       }
     } catch (err) {
       console.error(err);
