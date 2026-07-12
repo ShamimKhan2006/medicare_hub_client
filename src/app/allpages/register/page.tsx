@@ -76,17 +76,17 @@ const RegisterPage = () => {
     } 
   };
 
-  // const handleGoogle = async (): Promise<void> => {
-  //   try {
-  //     await authClient.signIn.social({ provider: "google" });
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Google sign-up failed. Please try again.");
-  //   }
-  // };
+  const handleGoogle = async (): Promise<void> => {
+    try {
+      await authClient.signIn.social({ provider: "google" });
+    } catch (err) {
+      console.error(err);
+      toast.error("Google sign-up failed. Please try again.");
+    }
+  };
 
   return (
-    <div className="mx-auto w-full max-w-md items-center px-4">
+    <div className="mx-auto w-full max-w-md items-center px-4 py-20">
       <form
         className="text-forground mt-20 flex flex-col gap-4 rounded-2xl p-6 shadow-md"
         onSubmit={handleRegister}
@@ -144,14 +144,14 @@ const RegisterPage = () => {
           <Separator className="text-forground w-30" />
         </div>
 
-        {/* <Button
+        <Button
           type="button"
           variant="outline"
           onClick={handleGoogle}
           className="text-forground mb-4 w-full"
         >
           <FcGoogle /> Sign Up with Google
-        </Button> */}
+        </Button> 
       </form>
     </div>
   );

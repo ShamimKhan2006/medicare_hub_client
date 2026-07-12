@@ -1,141 +1,4 @@
-// "use client"
 
-// import React from 'react';
-// import {Check} from "@gravity-ui/icons";
-// import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
-// const Addhealthpost = () => {
-
-//        const handleSubmit= async(e: React.FormEvent<HTMLFormElement>)=>{
-//         e.preventDefault()
-//        const formData=new FormData(e.currentTarget);
-//        const newData=Object.fromEntries(formData.entries());
-       
-//      const res=await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/addHealthPost`,{
-//         method:'POST',
-//         headers:{
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             // Add your health post data here
-//             ...newData
-//         })
-//     });
-//     const data=await res.json();
-//     console.log("data",data);
-// } 
-//     return (
-//         <div>
-//            <Form
-//         className="flex w-96 flex-col gap-4"
-//         render={(props) => <form {...props} data-custom="foo" />}
-//         onSubmit={handleSubmit}
-//       >
-//         <TextField
-//           isRequired
-//           name="doctorName"
-//           type="text"
-//         >
-//           <Label>Doctor name</Label>
-//           <Input placeholder="Dr. Sarah Johnson" />
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="specialty"
-//           type="text"
-//         >
-//           <Label>Specialty</Label>
-//           <Input placeholder="Cardiologist" />
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="hospital"
-//           type="text"
-//         >
-//           <Label>Hospital</Label>
-//           <Input placeholder="Medicare Hub Hospital" />
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="experience"
-//           type="number"
-//           validate={(value) => {
-//             if (Number(value) < 0) {
-//               return "Experience can't be negative";
-//             }
-//             return null;
-//           }}
-//         >
-//           <Label>Experience (years)</Label>
-//           <Input placeholder="12" />
-//           <Description>Number of years practicing</Description>
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="location"
-//           type="text"
-//         >
-//           <Label>Location</Label>
-//           <Input placeholder="New York, USA" />
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="price"
-//           type="number"
-//           validate={(value) => {
-//             if (Number(value) <= 0) {
-//               return "Price must be greater than 0";
-//             }
-//             return null;
-//           }}
-//         >
-//           <Label>Consultation price ($)</Label>
-//           <Input placeholder="120" />
-//           <FieldError />
-//         </TextField>
- 
-//         <TextField
-//           isRequired
-//           name="photoUrl"
-//           type="url"
-//           validate={(value) => {
-//             try {
-//               new URL(value);
-//               return null;
-//             } catch {
-//               return "Please enter a valid URL";
-//             }
-//           }}
-//         >
-//           <Label>Photo URL</Label>
-//           <Input placeholder="https://example.com/photo.jpg" />
-//           <FieldError />
-//         </TextField>
- 
-//         <div className="flex gap-2">
-//           <Button type="submit">
-//             <Check />
-//             Submit
-//           </Button>
-//           <Button type="reset" variant="secondary">
-//             Reset
-//           </Button>
-//         </div>
-//       </Form>
-//         </div>
-//     );
-// };
-
-// export default Addhealthpost;
 
 "use client"
 
@@ -145,6 +8,7 @@ import {
   HeartPulse, Brain, Bone, Baby, Smile, User, Activity, Eye
 } from "lucide-react";
 import { toast } from 'react-hot-toast';
+import { authClient } from '@/lib/auth-client';
 
 const CATEGORIES = [
   { value: "Cardiologist", label: "Cardiology", icon: HeartPulse },
@@ -164,9 +28,15 @@ const Addhealthpost = () => {
   const [category, setCategory] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const {data:session}=authClient.useSession()
+             const user=session?.user
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+
+
+
 
     if (!category) {
       setErrors((prev) => ({ ...prev, category: "Please choose a specialty category" }));
@@ -174,8 +44,17 @@ const Addhealthpost = () => {
     }
 
     const formData = new FormData(e.currentTarget);
-    const newData = Object.fromEntries(formData.entries());
-    newData.specialty = category;
+
+const newData = Object.fromEntries(formData.entries());
+
+newData.specialty = category;
+
+// এখানে email add করো
+newData.email = session?.user?.email || "";
+
+console.log(newData);
+           
+
 
     setSubmitting(true);
     try {
