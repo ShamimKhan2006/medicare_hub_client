@@ -17,6 +17,7 @@ import {
   Info,
   Mail,
 } from "lucide-react";
+;
 
 interface NavLink {
   label: string;
@@ -33,6 +34,13 @@ const PRIVATE_LINKS: NavLink[] = [
   { label: "Contact", href: "/contact", icon: Mail },
   { label: "My Interactions", href: "/my-interactions", icon: Activity },
 ];
+
+    //  const {data:session}=await auth.api.getSession({
+    //   headers: await headers()
+    //  }) 
+
+    //  const user=session?.user
+    //  console.log("user",user)
 
 export default function MedicardHubNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -395,7 +403,7 @@ export default function MedicardHubNavbar() {
                   />
                 </button>
 
-                {profileOpen && (
+                {/* {profileOpen && (
                   <div
                     className="mcn-dropdown"
                     style={{
@@ -427,7 +435,7 @@ export default function MedicardHubNavbar() {
                       <LogOut size={15} /> Log out
                     </button>
                   </div>
-                )}
+                )} */}
               </div>
             )}
           </div>
@@ -493,7 +501,7 @@ export default function MedicardHubNavbar() {
 
             <div style={{ height: "1px", background: "rgba(26,24,22,0.08)", margin: "10px 0" }} />
 
-            {!isLoggedIn ? (
+            {/* {!isLoggedIn ? (
               <button
                 className="mcn-cta"
                 onClick={() => {
@@ -525,7 +533,7 @@ export default function MedicardHubNavbar() {
               >
                 <LogOut size={17} /> Log out
               </button>
-            )}
+            )} */}
           </div>
         </div>
       )}
