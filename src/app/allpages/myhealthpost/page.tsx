@@ -2,7 +2,8 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Image from 'next/image';
 import React from 'react';
-import Link from 'next/link';
+
+
 const MyHealthPostPages = async () => {
      const session= await auth.api.getSession({
       headers:await headers()
