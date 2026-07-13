@@ -12,6 +12,8 @@ import {
   XCircle,
   Star
 } from 'lucide-react';
+import PostComments from '@/components/PostComments';
+import ShowComments from '@/components/ShowComments';
 
 type Params = Promise<{ id: string }>;
 
@@ -178,6 +180,10 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
         <p className="text-center text-gray-400 text-xs mt-8">
           Record ID: {id} · Fetched securely
         </p>
+           
+          <ShowComments doctorId={data._id}/>
+
+        <PostComments doctorId={data._id}/>
       </div>
     </div>
   );

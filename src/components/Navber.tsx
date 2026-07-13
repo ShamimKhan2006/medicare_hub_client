@@ -36,7 +36,7 @@ const NAV_LINKS: NavLink[] = [
   { label: "My Health Posts", href: "/allpages/myhealthpost", icon: FileText },
   { label: "About", href: "/about", icon: Info },
   { label: "Contact", href: "/contact", icon: Mail },
-  { label: "My Interactions", href: "/my-interactions", icon: Activity },
+  { label: "My Interactions", href: "/allpages/myinteractions", icon: Activity },
 ];
 
 export default function MedicardHubNavbar() {
