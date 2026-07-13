@@ -6,7 +6,6 @@ import {
   Button,
   Description,
   FieldError,
-
   Input,
   Label,
   Separator,
@@ -39,14 +38,16 @@ const validatePassword = (value: string): string | null => {
 const RegisterPage = () => {
   const router = useRouter();
 
-
-  const handleRegister = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleRegister = async (
+    e: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
-   
 
     const formData = new FormData(e.currentTarget);
-    const newData = Object.fromEntries(formData.entries()) as unknown as RegisterFormValues;
-       console.log("newdata",newData)
+    const newData = Object.fromEntries(
+      formData.entries(),
+    ) as unknown as RegisterFormValues;
+    console.log("newdata", newData);
     try {
       const { data, error } = await authClient.signUp.email({
         ...newData,
@@ -59,9 +60,8 @@ const RegisterPage = () => {
       }
 
       if (data) {
-     
         // Sync the new user to our own backend.
-        await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/register`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newData),
@@ -73,7 +73,7 @@ const RegisterPage = () => {
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
-    } 
+    }
   };
 
   const handleGoogle = async (): Promise<void> => {
@@ -131,11 +131,9 @@ const RegisterPage = () => {
 
         <Button
           type="submit"
-            
           className="my-5 w-full rounded-xl bg-gradient-to-r from-green-400 to-green-600 text-white transition-all duration-300 hover:scale-105"
         >
           Register
-    
         </Button>
 
         <div className="flex items-center justify-center gap-3">
@@ -151,7 +149,7 @@ const RegisterPage = () => {
           className="text-forground mb-4 w-full"
         >
           <FcGoogle /> Sign Up with Google
-        </Button> 
+        </Button>
       </form>
     </div>
   );

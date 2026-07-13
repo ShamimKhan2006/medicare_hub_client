@@ -11,10 +11,10 @@ interface LoginformsValues {
 }
 
 interface doctorId {
-    doctorId:string
+  doctorId: string;
 }
-const PostComments = ({doctorId}:doctorId) => {
-    const router=useRouter()
+const PostComments = ({ doctorId }: doctorId) => {
+  const router = useRouter();
   const handlePostComents = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -24,32 +24,29 @@ const PostComments = ({doctorId}:doctorId) => {
     const newData = Object.fromEntries(
       formData.entries(),
     ) as unknown as LoginformsValues;
-       
-     const allnewdata ={
-        ...newData,
-        doctorId
-     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/postscoments`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-        body: JSON.stringify(allnewdata),
+    const allnewdata = {
+      ...newData,
+      doctorId,
+    };
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/postscoments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      cache: "no-store",
+      body: JSON.stringify(allnewdata),
+    });
 
     const postData = await res.json();
     console.log("postData", postData);
     if (postData.insertedId) {
-  e.currentTarget.reset(); // form clear করবে
-  router.refresh();  
+      e.currentTarget.reset(); // form clear করবে
+      router.refresh();
+    }
+    // ShowComments নতুন data আনবে
   };
-        // ShowComments নতুন data আনবে
-}
   return (
     <div className="py-20">
       <form

@@ -74,7 +74,7 @@ const AllDatas: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const baseUrl = process.env.NEXT_PUBLIC_BETTER_AUTH_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${baseUrl}/alldata`, {
           method: "GET",
           headers: {
@@ -87,7 +87,7 @@ const AllDatas: React.FC = () => {
         }
 
         const raw: DataItem[] | ApiResponse = await res.json();
-        const list: DataItem[] = Array.isArray(raw) ? raw : raw?.data ?? [];
+        const list: DataItem[] = Array.isArray(raw) ? raw : (raw?.data ?? []);
 
         if (!cancelled) setData(list);
       } catch (err) {
@@ -185,7 +185,10 @@ const AllDatas: React.FC = () => {
               {/* Overlapping icon badge */}
               <div className="relative -mt-8 mb-4 flex justify-center">
                 <div className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center border-4 border-white shadow-md">
-                  <Stethoscope className="w-7 h-7 text-white" strokeWidth={1.5} />
+                  <Stethoscope
+                    className="w-7 h-7 text-white"
+                    strokeWidth={1.5}
+                  />
                 </div>
               </div>
 
@@ -204,7 +207,9 @@ const AllDatas: React.FC = () => {
               {(item.hospital || item.experience !== undefined) && (
                 <p className="text-gray-500 text-sm leading-relaxed px-6 mb-1">
                   {item.hospital ?? "N/A"}
-                  {item.experience !== undefined ? ` · ${item.experience} yrs experience` : ""}
+                  {item.experience !== undefined
+                    ? ` · ${item.experience} yrs experience`
+                    : ""}
                 </p>
               )}
 
@@ -219,7 +224,10 @@ const AllDatas: React.FC = () => {
               <div className="flex items-center justify-center gap-4 mb-6">
                 {item.rating !== undefined && (
                   <span className="flex items-center gap-1 text-gray-800 text-sm font-semibold">
-                    <Star className="w-4 h-4 text-yellow-500" fill="currentColor" />
+                    <Star
+                      className="w-4 h-4 text-yellow-500"
+                      fill="currentColor"
+                    />
                     {item.rating}
                   </span>
                 )}
@@ -283,24 +291,41 @@ const AllDatas: React.FC = () => {
                 )}
               </div>
               <div>
-                <h2 className="font-bold text-lg text-gray-900">{selected.name ?? "Unnamed"}</h2>
+                <h2 className="font-bold text-lg text-gray-900">
+                  {selected.name ?? "Unnamed"}
+                </h2>
                 {selected.email && (
-                  <p className="text-gray-500 text-xs mt-0.5">{selected.email}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">
+                    {selected.email}
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5">
               {selected.specialization && (
-                <ModalRow label="Specialization" value={selected.specialization} />
+                <ModalRow
+                  label="Specialization"
+                  value={selected.specialization}
+                />
               )}
               {selected.experience !== undefined && (
-                <ModalRow label="Experience" value={`${selected.experience} years`} />
+                <ModalRow
+                  label="Experience"
+                  value={`${selected.experience} years`}
+                />
               )}
-              {selected.hospital && <ModalRow label="Hospital" value={selected.hospital} />}
-              {selected.location && <ModalRow label="Location" value={selected.location} />}
+              {selected.hospital && (
+                <ModalRow label="Hospital" value={selected.hospital} />
+              )}
+              {selected.location && (
+                <ModalRow label="Location" value={selected.location} />
+              )}
               {formatFee(selected.fee) && (
-                <ModalRow label="Consultation Fee" value={formatFee(selected.fee)!} />
+                <ModalRow
+                  label="Consultation Fee"
+                  value={formatFee(selected.fee)!}
+                />
               )}
               {selected.rating !== undefined && (
                 <ModalRow label="Rating" value={`⭐ ${selected.rating}`} />
@@ -309,7 +334,11 @@ const AllDatas: React.FC = () => {
               <ModalRow
                 label="Status"
                 value={selected.available ? "Available Now" : "Currently Busy"}
-                valueClassName={selected.available ? "text-emerald-600 font-bold" : "text-gray-500 font-bold"}
+                valueClassName={
+                  selected.available
+                    ? "text-emerald-600 font-bold"
+                    : "text-gray-500 font-bold"
+                }
               />
               {extraEntries.map(([k, v]) => (
                 <ModalRow key={k} label={k} value={String(v)} />
@@ -333,7 +362,9 @@ const ModalRow = ({
 }) => (
   <div className="flex justify-between gap-4 text-sm border-b border-gray-100 pb-2">
     <span className="text-gray-400 font-semibold capitalize">{label}</span>
-    <span className={`text-gray-800 text-right ${valueClassName ?? ""}`}>{value}</span>
+    <span className={`text-gray-800 text-right ${valueClassName ?? ""}`}>
+      {value}
+    </span>
   </div>
 );
 

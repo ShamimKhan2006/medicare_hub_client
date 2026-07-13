@@ -13,7 +13,7 @@ interface doctorId{
 
 const ShowComments = async ({doctorId} : doctorId) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/showcomments/${doctorId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/showcomments/${doctorId}`,
     {
       cache: "no-store",
     }
