@@ -48,7 +48,7 @@ const MedicareUpdates = () => {
               <span className="text-red-600 font-extrabold">updates</span>
             </h2>
             <p className="text-gray-600 text-sm leading-relaxed max-w-lg">
-              Read our latest news from the company or general medical news. Feel free 
+              Read our latest news from the company or general medical news.  Feel free 
               to ask questions in comments for any news you find interesting.
             </p>
           </div>
