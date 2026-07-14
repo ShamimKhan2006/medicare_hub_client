@@ -35,7 +35,7 @@ const TeamIntro = () => {
           {/* Paragraph */}
           <p className="text-gray-600 text-base leading-relaxed max-w-lg mb-10">
             Some up and coming trends are healthcare consolidation for independent 
-            healthcare centers that see a cut in unforeseen payouts. High deductible 
+            healthcare centers that see a cutt in unforeseen payouts. High deductible 
             health plans are also expected to transpire along with a growth of 
             independent practices.
           </p>
@@ -51,7 +51,6 @@ const TeamIntro = () => {
   
           </div>
 
-          {/* Divider */}
           <div className="w-full h-px bg-gray-200 mb-8" />
 
           {/* Feature columns */}
