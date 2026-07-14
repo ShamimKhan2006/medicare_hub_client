@@ -33,7 +33,8 @@ const LimitData = async () => {
     );
   }
 
-  const limitData: Doctor[] = await res.json();
+  const limitData: Doctor[] = await res.json(); 
+  console.log("limitData",limitData)
 
   return (
     <section className="bg-white py-16 px-4">

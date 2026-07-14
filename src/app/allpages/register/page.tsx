@@ -48,42 +48,43 @@ const RegisterPage = () => {
       formData.entries(),
     ) as unknown as RegisterFormValues;
     console.log("newdata", newData);
-    try {
+ 
       const { data, error } = await authClient.signUp.email({
         ...newData,
         callbackURL: "/",
       });
 
-      if (error) {
-        toast.error(error.message ?? "Register failed");
-        return;
+      
+
+      if(data){
+        toast.success("Register Successfully")
+        router.push("/allpages/login")
       }
 
-      if (data) {
-        // Sync the new user to our own backend.
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData),
-        });
-
-        toast.success("Registered successfully");
-        router.push("/allpages/login");
+      if(error){
+        toast.error(error.message || "Register failed")
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong. Please try again.");
+       
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`,{
+        method:"POST",
+        headers:{
+           "Content-Type":"application/json"
+        },
+        cache:"no-store",
+        body:JSON.stringify(newData)
+        
+      })
+
     }
-  };
+  
 
+    
   const handleGoogle = async (): Promise<void> => {
-    try {
+
       await authClient.signIn.social({ provider: "google" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Google sign-up failed. Please try again.");
-    }
-  };
+    } 
+
 
   return (
     <div className="mx-auto w-full max-w-md items-center px-4 py-20">
@@ -153,6 +154,6 @@ const RegisterPage = () => {
       </form>
     </div>
   );
-};
 
+}
 export default RegisterPage;

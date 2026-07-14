@@ -18,7 +18,7 @@ import { authClient } from "@/lib/auth-client";
 
 interface LoginFormValues {
   email: string;
-  password: string;
+  password: string; 
 }
 
 const LoginPage = () => {
@@ -26,34 +26,25 @@ const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
-    const newData = Object.fromEntries(formData.entries()) as unknown as LoginFormValues;
+  const formData = new FormData(e.currentTarget);
+  const newData = Object.fromEntries(formData.entries()) as unknown as LoginFormValues;
 
-    try {
-      const { data, error } = await authClient.signIn.email({
-        ...newData,
-        callbackURL: "/",
-      });
+    const { data, error } = await authClient.signIn.email({
+              ...newData,
+           
+    })
 
-      if (error) {
-        toast.error(error.message ?? "Login failed");
-        return;
-      }
 
-      if (data) {
-        toast.success("Logged in successfully");
-        router.push("/");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+   if(data){
+    toast.success("Login Sucessfully")
+    router.push("/")
+   }else{
+    toast.error(error.message|| "Login failed")
+   }
+};
 
   const handleGoogle = async (): Promise<void> => {
     try {

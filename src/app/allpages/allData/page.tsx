@@ -81,6 +81,8 @@ const AllDatas: React.FC = () => {
             "Content-Type": "application/json",
           },
         });
+         
+      
 
         if (!res.ok) {
           throw new Error(`Failed to fetch (status ${res.status})`);
