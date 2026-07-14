@@ -1,6 +1,8 @@
 import { createAuthClient } from "better-auth/react"
+
 export const authClient = createAuthClient({
-    /** The base URL of the server (optional if you're using the same domain) */
-baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+  /** baseURL না দিলে browser এর current origin (client নিজেই) ব্যবহার করে,
+   *  যেখানে better-auth handler (/api/auth/...) আছে। এতে CORS error ঠেকানো যায়। */
 })
-export const { signIn, signUp, useSession,getSession,signOut } = createAuthClient()
+
+export const { signIn, signUp, useSession, getSession, signOut } = authClient
