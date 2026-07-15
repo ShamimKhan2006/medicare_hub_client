@@ -1,4 +1,5 @@
 import NotFound from "@/app/not-found";
+import Delete from "@/components/Delete";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -62,7 +63,8 @@ const MyHealthPostPages = async () => {
             className="doctor-card group relative overflow-hidden rounded-[28px] bg-white border border-slate-100 shadow-[0_4px_20px_-8px_rgba(15,23,42,0.12)] transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_28px_50px_-16px_rgba(15,110,86,0.28)] hover:border-teal-100"
           >
             <div className="relative h-72 overflow-hidden">
-              <img
+           
+               <img
                 src={doctor.photoUrl}
                 alt={doctor.doctorName}
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
@@ -147,10 +149,7 @@ const MyHealthPostPages = async () => {
               </div>
 
               <div className="flex gap-3 pt-1">
-                <button className="relative flex-1 overflow-hidden rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-teal-700 hover:shadow-lg hover:shadow-teal-600/30 active:scale-[0.98]">
-                  <span className="shine absolute inset-0 w-1/3 bg-white/25" />
-                  <span className="relative">View Details</span>
-                </button>
+               <Delete deleteId={doctor._id} endpoint="deleteDoctor"/>
 
                 <button className="flex-1 rounded-xl border-2 border-red-600 py-3 text-sm font-semibold text-red-600 transition-all duration-300 hover:bg-red-600 hover:text-white active:scale-[0.98]">
                   Edit

@@ -3,10 +3,11 @@ import {
   MessageCircle,
   Mail,
   Calendar,
-  Pencil,
-  Trash2,
+
 } from "lucide-react";
 
+import Delete from "@/components/Delete"; 
+import Edit from "@/components/Edit"; 
 interface doctorId{
     doctorId:string
 }
@@ -20,6 +21,8 @@ const ShowComments = async ({doctorId} : doctorId) => {
   );
 
   const comments = await res.json();
+ 
+    
 
   return (
     <section className="mb-10">
@@ -69,15 +72,13 @@ const ShowComments = async ({doctorId} : doctorId) => {
               </div>
 
               <div className="flex gap-3">
-                <button className="flex items-center gap-2 rounded-xl bg-blue-100 px-4 py-2 text-blue-600 hover:bg-blue-600 hover:text-white transition">
-                  <Pencil size={18} />
-                  Edit
-                </button>
+              <Edit
+  editId={comment._id}
+  endpoint="EditComment"
+  defaultComment={comment.comment}
+/>
 
-                <button className="flex items-center gap-2 rounded-xl bg-red-100 px-4 py-2 text-red-600 hover:bg-red-600 hover:text-white transition">
-                  <Trash2 size={18} />
-                  Delete
-                </button>
+                <Delete deleteId={comment._id} endpoint="deleteShowComment" ></Delete>
               </div>
             </div>
 

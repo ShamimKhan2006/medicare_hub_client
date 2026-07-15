@@ -4,6 +4,8 @@ import React from "react";
 import { type FormEvent } from "react";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { error } from "console";
 interface LoginformsValues {
   name: string;
   email: string;
@@ -39,13 +41,22 @@ const PostComments = ({ doctorId }: doctorId) => {
       body: JSON.stringify(allnewdata),
     });
 
-    const postData = await res.json();
+    const postData = await res.json(); 
+
+    if(res.ok){
+       toast.success("Post comment Successfully")
+       router.refresh()
+    }else {
+  toast.error(postData.message || "Failed to post comment");
+}
+
+
     console.log("postData", postData);
     if (postData.insertedId) {
       e.currentTarget.reset(); // form clear করবে
       router.refresh();
     }
-    // ShowComments নতুন data আনবে
+      
   };
   return (
     <div className="py-20">
@@ -81,7 +92,7 @@ const PostComments = ({ doctorId }: doctorId) => {
         ></textarea>
         <br />
         <br />
-        <Button type="submit" className="max-w-3xl my-4 ">
+        <Button type="submit" className="max-w-3xl my-4 bg-red-500 ">
           Post Comment
         </Button>
       </form>

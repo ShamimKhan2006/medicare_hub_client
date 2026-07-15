@@ -1,20 +1,26 @@
 import Reveal, { RevealGroup } from "@/components/Reveal";
+import Delete from "@/components/Delete"; 
+import NotFound from "@/app/not-found";
 import {
   MessageCircle,
   Heart,
-  Trash2,
+   
   Calendar,
   Mail,
   User,
 } from "lucide-react";
-
+ 
 const MyInteractionsPage = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
     cache: "no-store",
   });
 
-  const comments = await res.json();
-
+  const comments = await res.json(); 
+  console.log(comments)
+    
+  if(comments.length ===0){
+    return <NotFound></NotFound>
+  }
   return (
     <section className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-6xl mx-auto px-4">
@@ -65,13 +71,13 @@ const MyInteractionsPage = async () => {
 
                 <div className="flex gap-3">
                   <button className="flex items-center gap-2 rounded-xl bg-pink-100 px-4 py-2 text-pink-600 hover:bg-pink-600 hover:text-white transition">
-                    <Heart size={18} />
+                    <Heart size={12} />
                     Like
                   </button>
 
-                  <button className="rounded-xl bg-red-100 p-3 text-red-600 hover:bg-red-600 hover:text-white transition">
-                    <Trash2 size={18} />
-                  </button>
+                  
+                  <Delete deleteId={comment._id} endpoint="deleteComment"></Delete>
+                  
                 </div>
               </div>
 
