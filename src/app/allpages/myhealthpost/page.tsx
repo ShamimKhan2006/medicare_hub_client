@@ -1,3 +1,4 @@
+import NotFound from "@/app/not-found";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -26,7 +27,9 @@ const MyHealthPostPages = async () => {
   if (!res.ok) {
     throw new Error(`Request failed: ${res.status}`);
   }
-
+    if(data.length === 0){
+      return <NotFound></NotFound>
+    }
   console.log(data);
 
   return (

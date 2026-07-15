@@ -1,3 +1,4 @@
+import Reveal, { RevealGroup } from "@/components/Reveal";
 import {
   MessageCircle,
   Heart,
@@ -17,23 +18,25 @@ const MyInteractionsPage = async () => {
   return (
     <section className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900">
-              My Interactions
-            </h1>
+        <Reveal direction="up" duration={0.6} amount={0.1}>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-slate-900">
+                My Interactions
+              </h1>
 
-            <p className="mt-2 text-gray-500">
-              Manage all your comments in one place.
-            </p>
+              <p className="mt-2 text-gray-500">
+                Manage all your comments in one place.
+              </p>
+            </div>
+
+            <div className="rounded-xl bg-red-600 px-6 py-3 text-white font-bold shadow-lg">
+              Total Comments: {comments.length}
+            </div>
           </div>
+        </Reveal>
 
-          <div className="rounded-xl bg-red-600 px-6 py-3 text-white font-bold shadow-lg">
-            Total Comments: {comments.length}
-          </div>
-        </div>
-
-        <div className="space-y-6">
+        <RevealGroup stagger={0.08} amount={0.1} className="space-y-6">
           {comments.map((comment: any) => (
             <div
               key={comment._id}
@@ -82,7 +85,7 @@ const MyInteractionsPage = async () => {
               </div>
             </div>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

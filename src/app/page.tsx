@@ -6,18 +6,53 @@ import LimitData from "@/components/LimitData";
 import NewsletterSection from "@/components/NewsletterSection";
 import MedicareUpdates from "@/components/MedicareUpdates";
 
-
+import Reveal from "@/components/Reveal";
 
 export default function Home() {
   return (
     <div>
+      <Reveal>
+
        <Banner/> 
-       <LimitData/>
-       <Testimonial/>
-       <MedicareUpdates/>
-       <TeamInfo/>
-       <HowCanWeHelp/> 
-       <NewsletterSection/>
+
+      </Reveal>
+      <Reveal>
+
+        <LimitData/>
+
+      </Reveal>
+      <Reveal>
+
+          <Testimonial/>
+
+      </Reveal>
+      <Reveal>
+
+         <MedicareUpdates/>
+
+      </Reveal>
+      <Reveal>
+
+         <TeamInfo/>
+
+      </Reveal>
+      <Reveal>
+
+        <HowCanWeHelp/> 
+
+      </Reveal>
+      <Reveal>
+
+          <NewsletterSection/>
+
+      </Reveal>
+
+    
+     
+       
+       
+       
+     
     </div>
   );
 }

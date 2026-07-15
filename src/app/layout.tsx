@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
          <Toaster />
          <Navber/>
-        {children}
+       {children}
          <Footer/>
         </body>
     </html>

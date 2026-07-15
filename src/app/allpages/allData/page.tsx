@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Stethoscope, Star, CheckCircle2, User } from "lucide-react";
+import Loading from "@/app/loading";
+import Reveal, { RevealGroup } from "@/components/Reveal";
 
 interface DataItem {
   _id: string;
@@ -115,12 +117,13 @@ const AllDatas: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-white">
-        <div className="w-4 h-4 rounded-full bg-red-600 animate-pulse" />
-        <h2 className="mt-4 font-semibold text-gray-700">Loading records…</h2>
-      </div>
-    );
-  }
+  
+   <div>
+
+     <Loading></Loading>
+   </div>
+    )  
+}
 
   if (error) {
     return (
@@ -141,6 +144,7 @@ const AllDatas: React.FC = () => {
   return (
     <div className="min-h-screen bg-white py-12 px-4">
       {/* Header */}
+      <Reveal amount={0.1} duration={0.6} direction="up"   > 
       <header className="text-center mb-12">
         <span className="text-red-600 text-xs font-bold tracking-[0.2em] uppercase">
           Directory
@@ -151,9 +155,13 @@ const AllDatas: React.FC = () => {
         <p className="text-gray-500 text-sm">Total Records: {data.length}</p>
         <div className="w-10 h-[3px] bg-red-600 mx-auto mt-4" />
       </header>
-
+</Reveal>
       {/* Grid */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <RevealGroup
+        stagger={0.08}
+        amount={0.1}
+        className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {data.map((item, idx) => {
           const key = item._id || idx.toString();
           const fee = formatFee(item.fee);
@@ -255,7 +263,7 @@ const AllDatas: React.FC = () => {
             </div>
           );
         })}
-      </div>
+      </RevealGroup>
 
       {/* Modal (kept for optional future use) */}
       {selected && (
