@@ -25,18 +25,18 @@ const testimonials: Testimonial[] = [
     image: "https://images.unsplash.com/photo-1722969909962-fb17a0023166",
   },
   {
-    name: "William Smith",
+    name: "William Smithi",
     role: "TMR",
     quote:
       "I felt like 102 before, now I feel like 52, thanks to Dr. Chase and his team. Their expertise is second to none!",
-    image: "/https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca",
+    image: "https://plus.unsplash.com/premium_photo-1661590863910-69abf33b8f3f",
   },
   {
     name: "Ellen Norton",
     role: "Pacemaker Implantation",
     quote:
       "They gave me much more than health - they gave me my life back. One that I can still enjoy with my family and grandchildren.",
-    image: "/https://plus.unsplash.com/premium_photo-1723780910923-21fd152e839b",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a",
   },
 ];
 

@@ -17,7 +17,7 @@ import {
   User,
   Home,
   Info,
-  Mail,
+
 } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
@@ -34,8 +34,8 @@ const NAV_LINKS: NavLink[] = [
   { label: "Add Health Post", href: "/allpages/addhealthpost", icon: PlusCircle },
   { label: "Health Posts", href: "/allpages/allData", icon: Newspaper },
   { label: "My Health Posts", href: "/allpages/myhealthpost", icon: FileText },
-  { label: "About", href: "/about", icon: Info },
-  { label: "Contact", href: "/contact", icon: Mail },
+
+
   { label: "My Interactions", href: "/allpages/myinteractions", icon: Activity },
 ];
 

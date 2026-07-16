@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 import Delete from "@/components/Delete"; 
-import Edit from "@/components/Edit"; 
+
 interface doctorId{
     doctorId:string
 }
@@ -72,11 +72,7 @@ const ShowComments = async ({doctorId} : doctorId) => {
               </div>
 
               <div className="flex gap-3">
-              <Edit
-  editId={comment._id}
-  endpoint="EditComment"
-  defaultComment={comment.comment}
-/>
+              
 
                 <Delete deleteId={comment._id} endpoint="deleteShowComment" ></Delete>
               </div>

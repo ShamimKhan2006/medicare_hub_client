@@ -167,11 +167,7 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
         </div>
 
         {/* Book button */}
-        <div className="flex justify-center mt-10">
-          <button className="bg-red-600 hover:bg-red-700 transition-colors text-white font-bold text-xs tracking-wide uppercase px-10 py-4 rounded-full shadow-sm">
-            Book Appointment
-          </button>
-        </div>
+       
 
         {/* Footer note */}
         <p className="text-center text-gray-400 text-xs mt-8">
