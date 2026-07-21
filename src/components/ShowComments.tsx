@@ -74,7 +74,7 @@ const ShowComments = async ({doctorId} : doctorId) => {
               <div className="flex gap-3">
               
 
-                <Delete deleteId={comment._id} endpoint="deleteShowComment" ></Delete>
+                <Delete deleteId={comment._id} endpoint="deleteComment" ></Delete>
               </div>
             </div>
 

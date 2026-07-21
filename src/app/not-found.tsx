@@ -43,7 +43,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/all-doctors"
+            href="/allpages/allData"
             className="flex items-center gap-2 rounded-xl border-2 border-[#FFFEFE] px-7 py-3 font-semibold text-red-600 transition-all duration-300 hover:bg-[#FFFEFE] hover:shadow-lg"
           >
             <ArrowLeft size={20} />

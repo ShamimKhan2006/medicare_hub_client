@@ -166,24 +166,23 @@ const AllDatas: React.FC = () => {
         {data.map((item, idx) => {
           const key = item._id || idx.toString();
           const fee = formatFee(item.fee);
+          const hasImage = !!item.image && typeof item.image === "string" && item.image.trim().length > 0;
 
           return (
             <div key={key} className="bg-gray-50 pb-8 text-center">
               {/* Photo */}
               <div className="relative w-full h-64">
-                {item.image ? (
+                {hasImage ? (
                   <Image
-                    src={item.image}
+                    src={item.image as string}
                     alt={item.name ?? "Profile photo"}
                     fill
                     sizes="300px"
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-400">
-                      {initials(item.name, item.email)}
-                    </span>
+                  <div className="flex h-full w-full items-center justify-center bg-gray-100 text-2xl font-bold text-gray-400">
+                    {initials(item.name, item.email)}
                   </div>
                 )}
                 {fee && (

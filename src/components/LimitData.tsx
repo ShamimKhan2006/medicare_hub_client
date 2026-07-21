@@ -2,6 +2,20 @@ import React from "react";
 import Image from "next/image";
 import { Stethoscope, MapPin, Star, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
+
+const isValidImageSrc = (src?: string): boolean => {
+  if (!src || typeof src !== "string") return false;
+  const trimmed = src.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("/")) return true;
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 type Doctor = {
   _id: string;
   name: string;
@@ -33,8 +47,8 @@ const LimitData = async () => {
     );
   }
 
-  const limitData: Doctor[] = await res.json(); 
-  console.log("limitData",limitData)
+  const limitData: Doctor[] = await res.json();
+  console.log("limitData", limitData);
 
   return (
     <section className="bg-white py-16 px-4">
@@ -52,16 +66,24 @@ const LimitData = async () => {
 };
 
 const DoctorCard = ({ doctor }: { doctor: Doctor }) => {
+  const hasImage = isValidImageSrc(doctor?.image);
+
   return (
     <div className="bg-gray-50 pb-8 text-center">
       {/* Photo */}
       <div className="relative w-full h-64 mb-0">
-        <Image
-          src={doctor?.image}
-          alt={doctor?.name ?? "Doctor"}
-          fill
-          className="object-cover"
-        />
+        {hasImage ? (
+          <Image
+            src={doctor.image}
+            alt={doctor?.name ?? "Doctor"}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gray-100 text-2xl font-bold text-gray-400">
+            {doctor?.name?.[0] ?? "?"}
+          </div>
+        )}
         {/* Fee badge */}
         <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
           {doctor?.fee ?? "N/A"}
@@ -131,3 +153,4 @@ const DoctorCard = ({ doctor }: { doctor: Doctor }) => {
 };
 
 export default LimitData;
+

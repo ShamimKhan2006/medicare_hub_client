@@ -15,6 +15,19 @@ import {
 import PostComments from "@/components/PostComments";
 import ShowComments from "@/components/ShowComments";
 
+const isValidImageSrc = (src?: string | null): boolean => {
+  if (!src || typeof src !== "string") return false;
+  const trimmed = src.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("/")) return true;
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 type Params = Promise<{ id: string }>;
 
 const AlldetailsPage = async ({ params }: { params: Params }) => {
@@ -50,7 +63,7 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
         <div className="bg-gray-50 rounded-3xl overflow-hidden mb-8 text-center pb-8">
           {/* Photo */}
           <div className="relative w-full h-72">
-            {data?.image ? (
+            {isValidImageSrc(data?.image) ? (
               <Image
                 src={data.image}
                 alt={data?.name ?? "Doctor"}
@@ -58,7 +71,7 @@ const AlldetailsPage = async ({ params }: { params: Params }) => {
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center bg-gray-100">
                 <User className="w-16 h-16 text-gray-300" />
               </div>
             )}

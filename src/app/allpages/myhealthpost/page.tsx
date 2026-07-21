@@ -5,6 +5,19 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import React from "react";
 
+const isValidImageSrc = (src?: string | null): boolean => {
+  if (!src || typeof src !== "string") return false;
+  const trimmed = src.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("/")) return true;
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 const MyHealthPostPages = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -28,9 +41,7 @@ const MyHealthPostPages = async () => {
   if (!res.ok) {
     throw new Error(`Request failed: ${res.status}`);
   }
-    if(data.length === 0){
-      return <NotFound></NotFound>
-    }
+
   console.log(data);
 
   return (
@@ -65,7 +76,7 @@ const MyHealthPostPages = async () => {
             <div className="relative h-72 overflow-hidden">
            
                <img
-                src={doctor.photoUrl}
+                src={isValidImageSrc(doctor.photoUrl) ? doctor.photoUrl : "/file.svg"}
                 alt={doctor.doctorName}
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
               />
