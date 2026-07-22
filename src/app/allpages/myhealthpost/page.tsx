@@ -159,12 +159,10 @@ const MyHealthPostPages = async () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-1">
+              <div className="flex gap-3 pt-1 w-full">
                <Delete deleteId={doctor._id} endpoint="deleteDoctor"/>
 
-                <button className="flex-1 rounded-xl border-2 border-red-600 py-3 text-sm font-semibold text-red-600 transition-all duration-300 hover:bg-red-600 hover:text-white active:scale-[0.98]">
-                  Edit
-                </button>
+               
               </div>
             </div>
           </div>
