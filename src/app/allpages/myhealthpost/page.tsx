@@ -160,7 +160,7 @@ const MyHealthPostPages = async () => {
               </div>
 
               <div className="flex gap-3 pt-1 w-full">
-               <Delete deleteId={doctor._id} endpoint="deleteDoctor"/>
+               <Delete deleteId={doctor._id} endpoint="deleteMyHealthPost"/>
 
                
               </div>
